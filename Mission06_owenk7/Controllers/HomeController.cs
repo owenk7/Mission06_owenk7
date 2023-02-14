@@ -39,11 +39,18 @@ namespace Mission06_owenk7.Controllers
         [HttpPost]
         public IActionResult FormView(FormModel model)
         {
-            _movieContext.Add(model);
+            if (ModelState.IsValid)
+            {
+                _movieContext.Add(model);
 
-            _movieContext.SaveChanges();
+                _movieContext.SaveChanges();
 
-            return View("Confirmation");
+                return View("Confirmation");
+            }
+            else
+            {
+                return View(model);
+            }
         }
 
         [ResponseCache(Duration = 0, Location = ResponseCacheLocation.None, NoStore = true)]
