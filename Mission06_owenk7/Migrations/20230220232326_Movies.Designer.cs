@@ -8,7 +8,7 @@ using Mission06_owenk7.Models;
 namespace Mission06_owenk7.Migrations
 {
     [DbContext(typeof(MovieContext))]
-    [Migration("20230214005732_Movies")]
+    [Migration("20230220232326_Movies")]
     partial class Movies
     {
         protected override void BuildTargetModel(ModelBuilder modelBuilder)
@@ -17,15 +17,70 @@ namespace Mission06_owenk7.Migrations
             modelBuilder
                 .HasAnnotation("ProductVersion", "3.1.32");
 
+            modelBuilder.Entity("Mission06_owenk7.Models.Category", b =>
+                {
+                    b.Property<int>("CategoryId")
+                        .ValueGeneratedOnAdd()
+                        .HasColumnType("INTEGER");
+
+                    b.Property<string>("CategoryName")
+                        .HasColumnType("TEXT");
+
+                    b.HasKey("CategoryId");
+
+                    b.ToTable("categories");
+
+                    b.HasData(
+                        new
+                        {
+                            CategoryId = 1,
+                            CategoryName = "Action/Adventure"
+                        },
+                        new
+                        {
+                            CategoryId = 2,
+                            CategoryName = "Comedy"
+                        },
+                        new
+                        {
+                            CategoryId = 3,
+                            CategoryName = "Drama"
+                        },
+                        new
+                        {
+                            CategoryId = 4,
+                            CategoryName = "Family"
+                        },
+                        new
+                        {
+                            CategoryId = 5,
+                            CategoryName = "Horror/Suspense"
+                        },
+                        new
+                        {
+                            CategoryId = 6,
+                            CategoryName = "Miscellaneous"
+                        },
+                        new
+                        {
+                            CategoryId = 7,
+                            CategoryName = "Television"
+                        },
+                        new
+                        {
+                            CategoryId = 8,
+                            CategoryName = "VHS"
+                        });
+                });
+
             modelBuilder.Entity("Mission06_owenk7.Models.FormModel", b =>
                 {
                     b.Property<int>("movieid")
                         .ValueGeneratedOnAdd()
                         .HasColumnType("INTEGER");
 
-                    b.Property<string>("cat")
-                        .IsRequired()
-                        .HasColumnType("TEXT");
+                    b.Property<int>("CategoryId")
+                        .HasColumnType("INTEGER");
 
                     b.Property<string>("director")
                         .IsRequired()
@@ -54,13 +109,15 @@ namespace Mission06_owenk7.Migrations
 
                     b.HasKey("movieid");
 
+                    b.HasIndex("CategoryId");
+
                     b.ToTable("recommendations");
 
                     b.HasData(
                         new
                         {
                             movieid = 1,
-                            cat = "Action/Adventure",
+                            CategoryId = 1,
                             director = "John McTiernan",
                             edited = false,
                             rating = "R",
@@ -70,7 +127,7 @@ namespace Mission06_owenk7.Migrations
                         new
                         {
                             movieid = 2,
-                            cat = "Action/Adventure",
+                            CategoryId = 1,
                             director = "Renny Harlin",
                             edited = false,
                             rating = "R",
@@ -80,13 +137,22 @@ namespace Mission06_owenk7.Migrations
                         new
                         {
                             movieid = 3,
-                            cat = "Family",
+                            CategoryId = 4,
                             director = "Jennifer Lee, Chris Buck",
                             edited = true,
                             rating = "PG",
                             title = "Frozen 2",
                             year = 2019
                         });
+                });
+
+            modelBuilder.Entity("Mission06_owenk7.Models.FormModel", b =>
+                {
+                    b.HasOne("Mission06_owenk7.Models.Category", "Category")
+                        .WithMany()
+                        .HasForeignKey("CategoryId")
+                        .OnDelete(DeleteBehavior.Cascade)
+                        .IsRequired();
                 });
 #pragma warning restore 612, 618
         }

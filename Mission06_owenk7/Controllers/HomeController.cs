@@ -1,4 +1,5 @@
 ﻿using Microsoft.AspNetCore.Mvc;
+using Microsoft.EntityFrameworkCore;
 using Microsoft.Extensions.Logging;
 using Mission06_owenk7.Models;
 using System;
@@ -11,12 +12,10 @@ namespace Mission06_owenk7.Controllers
 {
     public class HomeController : Controller
     {
-        private readonly ILogger<HomeController> _logger;
         private MovieContext _movieContext { get; set; }
 
-        public HomeController(ILogger<HomeController> logger, MovieContext x)
+        public HomeController(MovieContext x)
         {
-            _logger = logger;
             _movieContext = x;
         }
 
@@ -33,6 +32,8 @@ namespace Mission06_owenk7.Controllers
         [HttpGet]
         public IActionResult FormView()
         {
+            ViewBag.Categories = _movieContext.Categories.ToList();
+
             return View();
         }
 
@@ -45,18 +46,61 @@ namespace Mission06_owenk7.Controllers
 
                 _movieContext.SaveChanges();
 
-                return View("Confirmation");
+                return View("Confirmation", model);
             }
             else
             {
+                ViewBag.Categories = _movieContext.Categories.ToList();
+
                 return View(model);
             }
         }
 
-        [ResponseCache(Duration = 0, Location = ResponseCacheLocation.None, NoStore = true)]
-        public IActionResult Error()
+        [HttpGet]
+        public IActionResult MovieList()
         {
-            return View(new ErrorViewModel { RequestId = Activity.Current?.Id ?? HttpContext.TraceIdentifier });
+            var movies = _movieContext.recommendations
+                .Include(x => x.Category)
+                .ToList();
+            //.OrderBy(x => x.rating)
+            //.Where(x => x.rating == "PG")
+
+            return View(movies);
+        }
+
+        [HttpGet]
+        public IActionResult Edit(int id)
+        {
+            ViewBag.Categories = _movieContext.Categories.ToList();
+
+            var movie = _movieContext.recommendations.Single(x => x.Movieid == id);
+
+            return View("FormView", movie);
+        }
+
+        [HttpPost]
+        public IActionResult Edit(FormModel editmodel)
+        {
+            _movieContext.Update(editmodel);
+            _movieContext.SaveChanges();
+
+            return RedirectToAction("MovieList");
+        }
+
+        [HttpGet]
+        public IActionResult Delete(int id)
+        {
+            var movie = _movieContext.recommendations.Single(x => x.Movieid == id);
+            return View(movie);
+        }
+
+        [HttpPost]
+        public IActionResult Delete(FormModel model)
+        {
+            _movieContext.recommendations.Remove(model);
+            _movieContext.SaveChanges();
+
+            return RedirectToAction("MovieList");
         }
     }
 }

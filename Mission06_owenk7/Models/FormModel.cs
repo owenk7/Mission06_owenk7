@@ -10,29 +10,31 @@ namespace Mission06_owenk7.Models
     public class FormModel
     {
         [Key]
-        [Required]
-        public int movieid { get; set; }
+        public int? Movieid { get; set; }
 
-        [Required]
-        public string title { get; set; }
+        [Required(ErrorMessage = "Enter a Movie Name.")]
+        public string Title { get; set; }
 
-        [Required]
-        public int year { get; set; }
+        [Required(ErrorMessage = "Please enter the year the movie was made.")]
+        public int Year { get; set; }
 
-        [Required]
-        public string cat { get; set; }
+        [Required(ErrorMessage = "Please enter the director of the movie.")]
+        public string Director { get; set; }
 
-        [Required]
-        public string director { get; set; }
+        [Required(ErrorMessage = "Choose a Movie Rating")]
+        public string Rating { get; set; }
 
-        [Required]
-        public string rating { get; set; }
+        public bool Edited { get; set; }
 
-        public bool edited { get; set; }
-
-        public string lent { get; set; }
+        public string Lent { get; set; }
 
         [MaxLength(25)]
-        public string notes { get; set; }
+        public string Notes { get; set; }
+
+        // build relationship to category table
+        [Required]
+        public int CategoryId { get; set; }
+
+        public Category Category { get; set; }
     }
 }

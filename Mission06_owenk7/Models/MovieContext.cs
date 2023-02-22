@@ -17,44 +17,58 @@ namespace Mission06_owenk7.Models
         // DbSet and pass FormModel, model that contains form
         public DbSet<FormModel> recommendations { get; set; }
 
+        public DbSet<Category> Categories { get; set; }
+
+        // seeding the data
         protected override void OnModelCreating(ModelBuilder mb)
         {
+            mb.Entity<Category>().HasData(
+                new Category { CategoryId = 1, CategoryName = "Action/Adventure" },
+                new Category { CategoryId = 2, CategoryName = "Comedy" },
+                new Category { CategoryId = 3, CategoryName = "Drama" },
+                new Category { CategoryId = 4, CategoryName = "Family" },
+                new Category { CategoryId = 5, CategoryName = "Horror/Suspense" },
+                new Category { CategoryId = 6, CategoryName = "Miscellaneous" },
+                new Category { CategoryId = 7, CategoryName = "Television" },
+                new Category { CategoryId = 8, CategoryName = "VHS" }
+
+                );
             mb.Entity<FormModel>().HasData(
                 new FormModel
                 {
-                    movieid = 1,
-                    title = "Die Hard",
-                    year = 1988,
-                    cat = "Action/Adventure",
-                    director = "John McTiernan",
-                    rating = "R",
-                    edited = false,
-                    lent = null,
-                    notes = null
+                    Movieid = 1,
+                    Title = "Die Hard",
+                    Year = 1988,
+                    CategoryId = 1,
+                    Director = "John McTiernan",
+                    Rating = "R",
+                    Edited = false,
+                    Lent = null,
+                    Notes = null
                 },
                 new FormModel
                 {
-                    movieid = 2,
-                    title = "Die Hard 2",
-                    year = 1990,
-                    cat = "Action/Adventure",
-                    director = "Renny Harlin",
-                    rating = "R",
-                    edited = false,
-                    lent = null,
-                    notes = null
+                    Movieid = 2,
+                    Title = "Die Hard 2",
+                    Year = 1990,
+                    CategoryId = 1,
+                    Director = "Renny Harlin",
+                    Rating = "R",
+                    Edited = false,
+                    Lent = null,
+                    Notes = null
                 },
                 new FormModel
                 {
-                    movieid = 3,
-                    title = "Frozen 2",
-                    year = 2019,
-                    cat = "Family",
-                    director = "Jennifer Lee, Chris Buck",
-                    rating = "PG",
-                    edited = true,
-                    lent = null,
-                    notes = null
+                    Movieid = 3,
+                    Title = "Frozen 2",
+                    Year = 2019,
+                    CategoryId = 4,
+                    Director = "Jennifer Lee, Chris Buck",
+                    Rating = "PG",
+                    Edited = true,
+                    Lent = null,
+                    Notes = null
                 }
             );
         }
