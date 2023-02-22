@@ -81,10 +81,19 @@ namespace Mission06_owenk7.Controllers
         [HttpPost]
         public IActionResult Edit(FormModel editmodel)
         {
-            _movieContext.Update(editmodel);
-            _movieContext.SaveChanges();
+            if (ModelState.IsValid)
+            {
+                _movieContext.Update(editmodel);
+                _movieContext.SaveChanges();
 
-            return RedirectToAction("MovieList");
+                return RedirectToAction("MovieList");
+            }
+            else
+            {
+                ViewBag.Categories = _movieContext.Categories.ToList();
+
+                return View("FormView", editmodel);
+            }
         }
 
         [HttpGet]
